@@ -105,7 +105,7 @@ const Slider = () => {
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
               <Button>
-                <NavLink to={`/`} style={{textDecoration:'none', color: '#000'}}>SHOP NOW</NavLink>
+                <NavLink to={"/products"} style={{textDecoration:'none', color: '#000'}}>SHOP NOW</NavLink>
               </Button>
             </InfoContainer>
           </Slide>
