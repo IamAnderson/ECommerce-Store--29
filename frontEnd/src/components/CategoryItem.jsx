@@ -51,7 +51,7 @@ const CategoryItem = ({item}) => {
   return (
     <>
       <Container>
-        <NavLink to={`/products/${item.cat}`} reloadDocument>
+        <NavLink to="/products" reloadDocument>
           <Image src={item.img}/>
           <Info>
             <Title> {item.title} </Title>

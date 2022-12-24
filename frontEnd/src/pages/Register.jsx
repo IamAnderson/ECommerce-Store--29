@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import bgImg from '../assets/pexels3.jpg'
+import { signup } from '../redux/apiCalls'
 import { Mobile } from '../Responsive'
 
 const Container = styled.div`
@@ -65,34 +68,77 @@ const Button = styled.button`
       color: teal;
       border: teal solid 1px;
       background-color: #FFF;
-      transition: all 0.3s ease;
+      transition: all 0.15s ease;
     }
 
     &:active{
       transform: scale(90%);
-      transition: 0.3s all ease;
+      transition: 0.15s all ease;
+    }
+
+    &:disabled{
+      cursor: not-allowed;
     }
 `
 
 
 const Register = () => {
+
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: '',
+    password: '',
+    password1: '',
+  });
+
+  const { username, email, password, password1 } = inputs
+
+  const handleInputs = (e) => {
+    setInputs(prev => {
+      return {...prev, 
+      [e.target.name]: e.target.value}
+    })
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isFetching, isSuccess } = useSelector((state) => state.user);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if(password !== password1){
+      console.log("password does not match")
+    }else{
+      const userData = { username, email, password }
+      signup(dispatch, {...userData})
+    }
+  }
+  
+  useEffect(() => {
+    if(isSuccess === true) {
+      navigate('/')
+    }
+
+    console.log(isSuccess)
+  }, [navigate, isSuccess])
+
+
   return (
     <Container>
         <Wrapper>
           <Title>CREATE AN ACCOUNT</Title>
           <Form>
-            <Input placeholder= 'name' />
-            <Input placeholder= 'last name' />
-            <Input placeholder= 'username' />
-            <Input placeholder= 'email' />
-            <Input placeholder= 'password' />
-            <Input placeholder= 'confirm password' />
+            <Input placeholder= 'username' name='username' onChange={handleInputs}/>
+            <Input placeholder= 'email' name='email' onChange={handleInputs}/>
+            <Input placeholder= 'password' type="password" name='password' onChange={handleInputs}/>
+            <Input placeholder= 'confirm password' type="password" name='password1' onChange={handleInputs}/>
 
             <Agreement>
               By creating an account, I consent to the processing of my personal data in accordance with the <b>PRIVACY POLICY</b>
             </Agreement>
 
-            <Button>Create</Button>
+            <Button onClick={handleSubmit} disabled={isFetching}>Create</Button>
           </Form>
         </Wrapper>
     </Container>

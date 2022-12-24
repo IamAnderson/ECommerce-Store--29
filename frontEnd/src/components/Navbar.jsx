@@ -1,11 +1,12 @@
 import { Badge, Input } from '@material-ui/core'
-import { Search, ShoppingCartOutlined } from '@material-ui/icons'
+import { Search, ShoppingCartOutlined, ExitToApp } from '@material-ui/icons'
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Mobile } from '../Responsive'
 import {useDispatch, useSelector} from "react-redux"
 import { logout } from '../redux/apiCalls'
+import { useState } from 'react'
 
 
 const Nb = styled.div`
@@ -85,26 +86,90 @@ const NbSignIn = styled(NavLink)`
 ` 
 
 const UserIcon = styled.div`
-    font-size: 18px;
-    margin-right: 3rem;
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+    
+    .user{
+        font-size: 18px;
+        text-transform: capitalize;
+    }
+    
+    .img{
+        border: 1px solid teal;
+        color: teal;
+        border-radius: 50%;
+        padding: 0.45rem;
+        margin: 0 1rem 0 0.35rem;
+
+        font-family: "Digital";
+        font-size: 1.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+`
+
+const LogTab = styled.div`
+    position: absolute;
+    top: 12%;
+    right: 2%;
+
+    border: 1px solid #000;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+
+    z-index: 10;
+
+    @media screen and (max-width: 500px){
+        top: 10%;
+        right: 18%;
+    }
+
+    span{
+        display: flex;
+        align-items: center;
+
+        font-size: 18px;
+        font-family: "Digital";
+        color: #000;
+        cursor: pointer;
+
+        
+        .icon{
+            margin-left: 0.5rem;
+
+            &:active{
+                transform: scale(90%);
+            }
+        }
+
+        &:active{
+            transform: scale(90%);
+        }
+    }   
 `
 
 
 const Navbar = () => {
     const cart = useSelector(state => state.cart.quantity);
     const { currentUser } = useSelector(state => state.user);
+
     const dispatch = useDispatch();
+    const [ showLog, setShowLog ] = useState(false);
 
     const handleLogout = () => {
-        dispatch(logout())
+        logout(dispatch)
     }
+
+    const userTag = currentUser?.username;
 
   return (
     <>
         <Nb>
             <NbCont>
                 <NbLeft>
-                    <Lang onClick={handleLogout}>
+                    <Lang>
                         EN    
                     </Lang>                 
 
@@ -125,9 +190,15 @@ const Navbar = () => {
                 <NbRight>
                     { currentUser ? 
                         <>
-                            <UserIcon>
-                                { currentUser?.username }
+                            <UserIcon onClick={() => setShowLog(!showLog)} onMouseEnter={() => setShowLog(true)}>
+                                <span className="img"> {userTag.split("")[0]}{userTag.split("")[1]} </span>
                             </UserIcon>
+
+                            <>{ showLog && (
+                                <LogTab onMouseEnter={() => setShowLog(true)} onMouseLeave={() => setShowLog(false)}>
+                                    <span onClick={handleLogout}> Logout <span className="icon"> <ExitToApp /> </span> </span>
+                                </LogTab>
+                            )}</>
                         </>
                         :
                         <NbMenu>

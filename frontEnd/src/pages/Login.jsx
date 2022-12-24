@@ -102,17 +102,12 @@ const NewAcct = styled(Link)`
     }
 `
 
-const Error = styled.span`
-  color: red;
-`
-
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const { isFetching, error } = useSelector((state) => state.user);
+  const { isFetching } = useSelector((state) => state.user);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -132,7 +127,7 @@ const Login = () => {
             </Retrieve>
 
             <Button onClick={handleLogin} disabled={isFetching}>Sign In</Button>
-            {error && <Error> Something went wrong.. </Error>}
+            {/* {error === true && <Error> Something went wrong.. </Error>} */}
             <NewAcct to='/SignUp'>
               Create New Account
             </NewAcct>

@@ -50,6 +50,7 @@ const Products = ({ cate, sort, filters }) => {
                 item[key].includes(value)
             ) )
         ) 
+    // eslint-disable-next-line
     }, [cate, filters]);
 
     useEffect(() => {
