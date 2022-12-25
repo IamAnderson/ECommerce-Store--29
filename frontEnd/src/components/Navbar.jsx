@@ -151,7 +151,7 @@ const LogTab = styled.div`
 `
 
 
-const Navbar = () => {
+const Navbar = ({ search, setSearchTerm }) => {
     const cart = useSelector(state => state.cart.quantity);
     const { currentUser } = useSelector(state => state.user);
 
@@ -173,15 +173,23 @@ const Navbar = () => {
                         EN    
                     </Lang>                 
 
-                    <NbSearch>
-                        <Input placeholder='search'/>
+                    {search ? <NbSearch>
+                        <Input placeholder='search' onChange={(e) => setSearchTerm(e.target.value)}/>
                         <Search style={{color: 'grey', fontSize: '1rem', cursor:'pointer'}}/>
+                    </NbSearch> 
+                        :
+                    <NbSearch>
+                        <Link to="/products">
+                            <Input placeholder='search' disabled/>
+                            <Search style={{color: 'grey', fontSize: '1rem', cursor:'pointer'}}/>
+                        </Link>
                     </NbSearch>
+                    }
                 </NbLeft>
 
 
                 <NbLogo>
-                    <Logo font={true }>
+                    <Logo font={true}>
                         <Link to='/' style={{textDecoration: 'none', color: '#000'}} reloadDocument>29.</Link>
                     </Logo>
                 </NbLogo>

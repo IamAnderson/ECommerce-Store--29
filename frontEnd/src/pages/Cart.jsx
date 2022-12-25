@@ -1,6 +1,5 @@
-import { Add, Remove } from "@material-ui/icons";
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import StripeCheckout from "react-stripe-checkout";
 import Announcement from "../components/Announcement";
@@ -9,7 +8,6 @@ import Navbar from "../components/Navbar";
 import { Mobile } from "../Responsive";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
-import { addProduct } from "../redux/cartRedux";
 
 const Container = styled.div`
 
@@ -72,6 +70,8 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
+
+  ${Mobile({flexDirection: 'column', alignItems: "flex-end", marginBottom: '50px'})}
 `;
 
 const ProductDetail = styled.div`
@@ -171,24 +171,12 @@ const Button = styled.button`
 
 const Cart = () => {
 
-  // const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
   const { currentUser } = useSelector(state => state.user);
 
   const KEY = process.env.REACT_APP_STRIPE;
   const [stripeToken, setStripeToken] = useState(null);
   const navigate = useNavigate();
-  
-
-  const incProduct = () => {
-
-  }
-
-  const decProduct = () => {
-    
-  }
-
-  // console.log(cart.products)
 
   const onToken = (token) => {
     setStripeToken(token);
@@ -260,11 +248,6 @@ const Cart = () => {
                       </Details>
                     </ProductDetail>
                     <PriceDetail>
-                      <ProductAmountContainer>
-                        <Add onClick={incProduct}/>
-                        <ProductAmount> {product.quantity} </ProductAmount>
-                        <Remove onClick={decProduct}/>
-                      </ProductAmountContainer>
                       <ProductPrice>$ {product.price * product.quantity} </ProductPrice>
                     </PriceDetail>
                   </Product>
